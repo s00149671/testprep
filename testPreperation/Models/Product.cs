@@ -29,10 +29,10 @@ namespace testPreperation.Models
         [Display(Name = "Date of first stocked")]
         public DateTime? FirstStockedOn { get; set; }
 
-        [Column(TypeName ="Quantity In Stock")]
+        [Display(Name ="Quantity In Stock")]
         public int QuantityInStock { get; set; }
 
-        [Column(TypeName ="Unit Price")]
+        [Display(Name ="Unit Price")]
         public float UnitPrice { get; set; }
 
         public virtual Category associatedCategory { get; set;
