@@ -4,6 +4,7 @@ namespace testPreperation.Migrations.ProductsMigrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<testPreperation.Models.ProductDbContext>
     {
@@ -15,18 +16,45 @@ namespace testPreperation.Migrations.ProductsMigrations
 
         protected override void Seed(testPreperation.Models.ProductDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            SeedCategoryProducts(context);
+            SeedProductCategory(context);
+        }
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+        private void SeedCategoryProducts(ProductDbContext context)
+        {
+            context.Categories.AddOrUpdate(c => c.CategoryName,
+            new Category[]
+            {
+                new Category
+                {
+                    CategoryName = "Plumbing",
+                    productsInCategory = new Product[]
+                    {
+                        new Product
+                        { Description = "stopper",
+                          FirstStockedOn = DateTime.Now - new TimeSpan(364,2,0,0),
+                          LastOrderDate = DateTime.Now - new TimeSpan(5,0,0),
+                          QuantityInStock = 200,
+                          UnitPrice = 0.20f
+                        }
+                    }
+                }
+            }
+            );
+        }
+
+        private void SeedProductCategory(ProductDbContext context)
+        {
+            context.Products.AddOrUpdate(p => p.Description,
+                new Product[] {
+                    new Product { Description = "9 Inch Bolts",
+                                  QuantityInStock = 200, UnitPrice = 0.50f,
+                                  FirstStockedOn = DateTime.Now - new TimeSpan(640,2,0,0),
+                                  LastOrderDate = DateTime.Now - new TimeSpan(3,0,0),
+                                  associatedCategory = new Category { CategoryName = "Building Supplies" },
+                    }
+
+                    });
         }
     }
 }
